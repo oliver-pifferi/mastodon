@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# Prune remote accounts that never interacted with any local user
+RAILS_ENV=production /home/mastodon/live/bin/tootctl accounts prune;
+
+# Remove remote statuses that local users never interacted with older than 7 days
+RAILS_ENV=production /home/mastodon/live/bin/tootctl statuses remove --days 7;
+
+# Remove media attachments older than 7 days
+RAILS_ENV=production /home/mastodon/live/bin/tootctl media remove --days 7;
+
+# Remove all headers (including people you follow)
+RAILS_ENV=production /home/mastodon/live/bin/tootctl media remove --remove-headers --include-follows --days 0;
+
+# Remove link previews older than 7 days
+RAILS_ENV=production /home/mastodon/live/bin/tootctl preview_cards remove --days 7;
+
+# Remove files not linked to any post
+RAILS_ENV=production /home/mastodon/live/bin/tootctl media remove-orphans;
